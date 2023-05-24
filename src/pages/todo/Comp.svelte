@@ -1,0 +1,73 @@
+<script>
+    import axios from "axios"
+    import Loader from "../Loader.svelte"
+    import Navigate from "./Navigate.svelte"
+    import TableComp from "./TableComp.svelte"
+    
+    let user = JSON.parse(localStorage.getItem('user'))
+
+  let Todos = []
+  const myTodos = async () => {
+  Todos = []
+    const response = await axios.get('https://gusty-ahead-comb.glitch.me/api/v1/todos',{
+      headers :{
+        'authorization': user.token
+      }
+    })
+    Todos = response.data.Todos.filter(todo => todo.isCompleted == true)
+
+}
+myTodos()
+    </script>
+    <main>
+        <div class="d-flex " style="height: 100vh;">
+            <Navigate/>
+            <div class="main_section">
+              <img src="../images/goal.jpg" alt="" class="background">
+              <div class="content_section">
+                <div class="content">
+                  <h1>I did it</h1>
+                </div>
+    
+                <div class="table_section">
+                    <!-- {#if Todos.length == 0}   -->
+                    <!-- <Loader/> -->
+                    <!-- {:else} -->
+                    <TableComp/>
+                  <!-- {/if} -->
+                  </div>
+              </div>
+            </div>
+        </div>
+    </main>
+    <style>
+      .main_section{
+        position: relative;
+        width: 1256px;
+        height: 100vh;
+      }
+      .background{
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
+        object-fit: cover;
+        background-repeat: no-repeat;
+    
+      }
+      .content_section{
+        position: absolute;
+        width: 90%;
+        height: 90%;
+        top: 10px;
+        left: 20px;
+      }
+      .content{
+        display: flex;
+        justify-content: space-between;
+      }
+      .table_section{
+        padding-top: 50px;
+        width: 90%;
+        height: 90%;
+      }
+    </style>
